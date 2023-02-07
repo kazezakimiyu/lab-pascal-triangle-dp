@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define MAX 100
+#define MAX 50000
 
 typedef unsigned long long ull;
 
