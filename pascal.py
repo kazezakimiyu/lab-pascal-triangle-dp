@@ -14,31 +14,52 @@ python3 pascal.py 30 > pascal_table.md
 import subprocess
 import time 
 import sys
+import math
 
 EXEC = ["./pascal.out"] 
 COMMON_ARG_FORMAT = "{n} {type} 0"
 FORMAT = "markdown"
+TIMEOUT = 60
+
+
 
 def run_single(n: int, type: int) -> float:
-    """Run a single instance collecting the total execution time"""
-    args = COMMON_ARG_FORMAT.format(n=n, type=type)
-    start = time.time()
-    subprocess.call(EXEC + args.split())
-    end = time.time()
-    return end - start
-
-def build_row(n:int) -> str:
-    """_summary_
+    """Run a single instance collecting the total execution time
 
     Args:
-        n (_type_): _description_
+        n (int): the row to generate
+        type (int): the type of algorithm to use
+
+    Returns:
+        float: the time it took, or nan if TIMEOUT is reached first
     """
-    iterative = run_single(n, 0)
-    recursive = run_single(n, 1)
-    dynamic_programming = run_single(n, 2)
+    args = COMMON_ARG_FORMAT.format(n=n, type=type)
+    try:
+        start = time.time()
+        subprocess.run(EXEC + args.split(), timeout=TIMEOUT)
+        end = time.time()
+        return end - start
+    except subprocess.TimeoutExpired:
+        return math.nan
+
+
+def build_row(n:int) -> str:
+    """Builds a row to print to the screen either in csv format or markdown
+
+    Args:
+        n (int): the row to build in the triangle
+
+    Returns:
+        str: a markdown formatted or csv string of the result
+    """
+    results_lst = []
+    for t in range(0,3):
+        result = run_single(n, t)
+        results_lst.append("-" if math.isnan(result) else f"{result:.5f}")
+    iterative, recursive, dynamic_programming = results_lst 
     if FORMAT == "markdown":
-        return f"| {n:<4} | {iterative:.5f} | {recursive:.5f} | {dynamic_programming:.5f} |"
-    return f"{n},{iterative:.5f},{recursive:.5f},{dynamic_programming:.5f}"
+        return f"| {n:<4} | {iterative.center(8, ' ')} | {recursive.center(8, ' ')} | {dynamic_programming.center(8, ' ')} |"
+    return f"{n},{iterative},{recursive},{dynamic_programming}"
 
 
 
