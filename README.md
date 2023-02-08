@@ -1,11 +1,127 @@
-# HW Instructions
+# Dynamic Programming
 
-👉🏽 **Task**
+In this lab we will explore dynamic programming. It is a fancy term, often taught in overly mathematical ways to say:
+
+> If we already calculated an answer, save it, so we don't have to calculate it again!
+
+Really, that is the heart of it. The idea we are willing to spend more on memory, to save time on speed. While there are some complexities, the idea of [memoization] is at the heart of it. If a function is a [pure function], it is relatively easy store the result? Why because with pure functions, you have the following properties (source wikipedia):
+
+1. the function return values are identical for identical arguments 
+2. the function has no side effects 
+
+In this lab, you will explore adding [memorization] to Pascal's Triangle and exploring the differences
+in speed. This will help you practice for the midterm project. 
 
 
-### Example
+## Pascal's Triangle
 
-Here is some example output using the script, timeout set to 60 seconds.
+Here is a cool video for [Pascal's Triangle] (that hopefully you watched before this lab): [Pascal's Triangle - Numberphile]
+
+The idea behind Pascal's triangle is that starting 1 for spot 0,0 (first row, single element), each following row is sum of two numbers directly above it. All outer edges are always 1. 
+
+![Triangle Animated]
+
+Mathematically, this is represented as 
+
+
+$$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$$
+
+or a way to look at it code wise:
+```c
+unsigned long long pascalr(int n, int k) {
+   if (n == k || k == 0)
+      return 1;
+   else
+      return pascalr(n - 1, k) + pascalr(n - 1, k - 1);
+}
+```
+
+You then have to loop through $n$ and $k$ calling your generator. 
+```c
+for (int i = 0; i < n; i++) {
+   for (int j = 0; j <= i; j++) {              
+      unsigned long long tmp = pascalr(i, j);
+      printf("%llu ", tmp);
+   }
+   printf("\n");
+}
+```
+
+However, while this algorithm is mathematically sound and easier to write, it is extremely inefficient. You have $n^2 * n^2$ operations making $O(n^4)$!!
+
+There are solutions that are cheaper, and your next step is to add memoization to reduce the cost of this algorithm. 
+
+## Updating Pascal.c
+You will see [pascal.c](pascal.c) already has the above recursive version and an iterative version that tracks the binominal coefficient with an expensive multiplication operation (at least slightly more expensive than addition if you think back to the assembly lab). 
+
+### Discussion and Code 
+Take this time to compile the given code, and play with the two given solutions. For example if your compile
+command is 
+
+```text
+clang -Wall pascal.c -o pascal.out
+```
+
+You could run the following to produce the following output:
+
+```text
+./pascal.out 10 0 2
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1
+1 6 15 20 15 6 1
+1 7 21 35 35 21 7 1
+1 8 28 56 70 56 28 8 1
+1 9 36 84 126 126 84 36 9 1
+```
+
+or
+
+```text
+./pascal.out 10 1 2
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1
+1 6 15 20 15 6 1
+1 7 21 35 35 21 7 1
+1 8 28 56 70 56 28 8 1
+1 9 36 84 126 126 84 36 9 1
+```
+
+Both will run relatively quickly, but if you increase your number to ~35, you will see a noticeable increase in time to finish for the recursive version as compared to the iterative solution. 
+
+👉🏽 **Task**: Discuss the following together:
+* What is the Big O for each version, and 
+* What are observations about the code? 
+  * For example, why use unsigned long long -what does that even mean!? 
+  * Why use typedef? 
+* You can also look up solutions online (there are a plenty of them) and discuss what you find.   
+
+
+
+### Dynamic Programming
+👉🏽 **Task**: Use [pascal.c] to write a dynamic programming variation of how to solve Pascal's Triangle for the Nth row.
+
+Take a moment to discuss and describe dynamic programming in your own words to your partner.  What are some things you are going to need to write a dynamic version of pascal's triangle. 
+
+1. Make sure you declare a multidimensional array. 
+2. Then for each value of  `[n][k]` store that answer in the table, if it isn't already in the table.   
+   Hint: since Pascal's triangle always has positive values 1 or higher, you can do the following for a check
+   ```c
+    if (table[n][k] > 0)  return table[n][k];
+   ```
+
+## Analysis
+
+Writing "scripts" such as [pascal.py](pascal.py) is a very common practice. In this case, it is setup to help generate comparable data between the different types of implementations. Take a moment to explore the script, and generate some data. 
+
+Here is an example output using the script, timeout set to 60 seconds.
 
 | n | Iterative | Recursive | Dynamic Programming |
 |--|:--:|:--:|:--:|
@@ -51,6 +167,23 @@ Here is some example output using the script, timeout set to 60 seconds.
 | 40   | 0.00297 |    -    | 0.00608 |
 
 
+### Modify Script?
+Simply due to the speed differences, it is hard to see the speed growth of the dynamic programming version and iterative version due to the extreme cost of the recursive version. You may want to modify the python, so only the dynamic programming and iterative version runs to generate a much larger dataset. 
+
+Either way, the goal is to experiment and see the differences in speed. 
+
+
+👉🏽 **Task**: Use either the provided CSV data, or data you generate to build a line graph comparing the various speeds (note you  may need to build separate line graphs for a better comparison). Discuss with your partner. 
 
 ## 📚 Resources
-Use this section to keep the homework description shorter, and instead talk about additional resources down here (such as tools to use, websites to review, etc)
+* [Geek for Geeks Pascal Triangle](https://www.geeksforgeeks.org/pascal-triangle/)
+* [Dynamic Programming Examples (python)](https://www.makeuseof.com/dynamic-programming-tutorial/)
+* [Memoization A "complete" tutorial](https://www.geeksforgeeks.org/what-is-memoization-a-complete-tutorial/)
+* [Leet Code - Dynamic Programming](https://leetcode.com/tag/dynamic-programming/) -note: sort for easy ones first...
+
+
+[memoization]: https://en.wikipedia.org/wiki/Memoization
+[pure function]: https://en.wikipedia.org/wiki/Pure_function
+[Pascal's Triangle - Numberphile]: https://www.youtube.com/watch?v=0iMtlus-afo
+[Pascal's Triangle]: https://en.wikipedia.org/wiki/Pascal%27s_triangle
+[Triangle Animated]: https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif

@@ -21,27 +21,30 @@ COMMON_ARG_FORMAT = "{n} {type} 0"
 FORMAT = "markdown"
 TIMEOUT = 60
 
+LAST_RUN_TRACKER = [0.0, 0.0, 0.0]
 
-
-def run_single(n: int, type: int) -> float:
+def run_single(n: int, typ: int) -> float:
     """Run a single instance collecting the total execution time
 
     Args:
         n (int): the row to generate
-        type (int): the type of algorithm to use
+        typ (int): the type of algorithm to use
 
     Returns:
         float: the time it took, or nan if TIMEOUT is reached first
     """
-    args = COMMON_ARG_FORMAT.format(n=n, type=type)
+    args = COMMON_ARG_FORMAT.format(n=n, type=typ)
+    if math.isnan(LAST_RUN_TRACKER[typ]): return math.nan  # skip running if we are already timing out
     try:
         start = time.time()
         subprocess.run(EXEC + args.split(), timeout=TIMEOUT)
         end = time.time()
-        return end - start
+        result = end - start
+        
     except subprocess.TimeoutExpired:
-        return math.nan
-
+        result = math.nan
+    LAST_RUN_TRACKER[typ] = result
+    return result
 
 def build_row(n:int) -> str:
     """Builds a row to print to the screen either in csv format or markdown
