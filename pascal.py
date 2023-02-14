@@ -6,9 +6,9 @@ common in research.
 
 Sample execution would be to write out the standard out (print) to a file. For example
 
-python3 pascal.py 30 csv  > pascal_run.csv
+python3 test_runner.py 30 csv  > pascal_run.csv
 
-python3 pascal.py 30 > pascal_table.md
+python3 test_runner.py 30 > pascal_table.md
 """
 
 import subprocess
