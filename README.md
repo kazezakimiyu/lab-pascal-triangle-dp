@@ -52,7 +52,9 @@ However, while this algorithm is mathematically sound and easier to write, it is
 There are solutions that are cheaper, and your next step is to add memoization to reduce the cost of this algorithm. 
 
 ## Updating Pascal.c
-You will see [pascal.c](pascal.c) already has the above recursive version and an iterative version that tracks the binominal coefficient with an expensive multiplication operation (at least slightly more expensive than addition if you think back to the assembly lab). 
+You will see [pascal.c](pascal.c) already has the above recursive version and an iterative version that
+is more expensive on memory, but is faster. There is an even faster iterative version, but it struggles with
+larger numbers due a multiplication and division calculation [ref](https://en.wikipedia.org/wiki/Binomial_coefficient#In_programming_languages). 
 
 ### Discussion and Code 
 Take this time to compile the given code, and play with the two given solutions. For example if your compile
@@ -174,6 +176,11 @@ Either way, the goal is to experiment and see the differences in speed.
 
 
 👉🏽 **Task**: Use either the provided CSV data, or data you generate to build a line graph comparing the various speeds (note you  may need to build separate line graphs for a better comparison). Discuss with your partner. 
+
+
+## Thinking Deeper
+These are not the most efficient implementations! If you have time, study different ways you can improve the implementation
+of pascals triangle. 
 
 ## 📚 Resources
 * [Geek for Geeks Pascal Triangle](https://www.geeksforgeeks.org/pascal-triangle/)
