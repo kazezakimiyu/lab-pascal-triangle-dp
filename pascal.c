@@ -27,32 +27,40 @@ ull pascalr(int n, int i)
     }
 }
 
-ull scalar(ull coef, int i, int j) {
-    if (i == 0 || j == 0)
-    {
-        return 1;
-    }
-    return coef * (i-j+1) / j;
-}
 
 ull *getPascalTriangle(int n, bool print, int version)
 {
-    ull coef = 0;
-    ull tmp;
+
+    ull tmp = 1;
     ull * row = malloc((sizeof(ull)) * n);
+    ull arr[n][n]; // for iterative version. n^2 space + n^2 time
+
+    /*if(version == 1) {
+        printf("Running recursive version\n");
+    }*/
     for (int i = 0; i < n; i++)
     {
+
         for (int j = 0; j <= i; j++)
-        {              
+        {
             if(version == 2) tmp = pascaldp(i, j);
-            else if(version == 1) tmp = pascalr(i, j);
+            else if(version == 1) {
+                tmp = pascalr(i, j);
+            }
             else {
-                coef = scalar(coef, i, j);
-                tmp = coef;
+                if(i == j || j == 0)  {
+                    arr[i][j] = 1;
+                    tmp = 1;
+                }
+                else {
+                    arr[i][j] = arr[i - 1][j-1] + arr[i-1][j];
+                    tmp = arr[i][j];
+                }
+
             }
             if(i+1 == n) row[j] = tmp;
             if (print) printf("%llu ", tmp);
-            
+
         }
         if(print) printf("\n");
     }
@@ -72,7 +80,7 @@ void printSingleRow(ull* row, int size) {
 void help() {
     printf("./pascal.out N [Type] [Print Level]\n");
     printf("\tN is the number of rows in the pascal triangle, required.\n");
-    printf("\t[Type] is either 3 for dynamic programming version, 2 for recursive version, 1 for iterative version, defaults to 1.\n");
+    printf("\t[Type] is either 2 for dynamic programming version, 1 for recursive version, 0 for iterative version, defaults to 0.\n");
     printf("\t[Print Level] is 0 for no print/speed compare only, 1 for print final row only, 2 for print all rows, defaults to 0.\n");
 
 }
