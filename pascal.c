@@ -45,7 +45,7 @@ ull *recursion_helper(int n, bool print, int version) {
         }
     }else {
         n--; // for ob1 error
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i <= n; i++) {
             ull tmp = 1;
             if(version == 2) tmp = pascaldp(n, i);
             else tmp = pascalr(n, i);
