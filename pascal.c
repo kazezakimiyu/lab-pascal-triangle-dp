@@ -26,55 +26,68 @@ ull pascalr(int n, int i)
         return pascalr(n - 1, i) + pascalr(n - 1, i - 1);
     }
 }
-
-
-ull *getPascalTriangle(int n, bool print, int version)
-{
-
-    ull tmp = 1;
+ull *recursion_helper(int n, bool print, int version) {
     ull * row = malloc((sizeof(ull)) * n);
-    ull arr[n][n]; // for iterative version. n^2 space + n^2 time
-
-    /*if(version == 1) {
-        printf("Running recursive version\n");
-    }*/
-    for (int i = 0; i < n; i++)
-    {
-
-        for (int j = 0; j <= i; j++)
-        {
-            if(version == 2) tmp = pascaldp(i, j);
-            else if(version == 1) {
-                tmp = pascalr(i, j);
-            }
-            else {
-                if(i == j || j == 0)  {
-                    arr[i][j] = 1;
-                    tmp = 1;
+    if(print) {
+       for (int i = 0; i < n; i++)
+       {
+            ull tmp = 1;
+            for (int j = 0; j <= i; j++)
+            {
+                if(version == 2) tmp = pascaldp(i, j);
+                else if(version == 1) {
+                    tmp = pascalr(i, j);
                 }
-                else {
-                    arr[i][j] = arr[i - 1][j-1] + arr[i-1][j];
-                    tmp = arr[i][j];
-                }
-
+                 if(i+1 == n) row[j] = tmp;
+                 printf("%lu ", tmp);
             }
-            if(i+1 == n) row[j] = tmp;
-            if (print) printf("%llu ", tmp);
-
+            printf("\n");
         }
-        if(print) printf("\n");
+    }else {
+        n--; // for ob1 error
+        for(int i = 0; i < n; i++) {
+            ull tmp = 1;
+            if(version == 2) tmp = pascaldp(n, i);
+            else tmp = pascalr(n, i);
+            row[i] = tmp;
+        }
     }
     return row;
 }
 
 void printSingleRow(ull* row, int size) {
     for(int i = 0; i < size; i++) {
-        printf("%llu ", row[i]);
-        //else printf(" ");
+        printf("%lu ", row[i]);
     }
     printf("\n");
+}
 
+ull *getPascalTriangle(int n, bool print, int version)
+{
 
+    if(version > 0) {
+        return recursion_helper(n, print, version);
+    }
+   // implied else for iterative version
+     ull** triangle = (ull**) malloc((n+1) * sizeof(ull*));
+    for (int i = 0; i < n; i++)
+    {
+        triangle[i] = (ull*) malloc((i+1) * sizeof(ull));
+        triangle[i][0] = 1;
+        for (int j = 1; j <= i; j++)
+        {
+            if(i == j)  {
+                triangle[i][j] = 1;
+            }
+            else {
+                triangle[i][j] = triangle[i-1][j-1] + triangle[i-1][j];
+            }
+        }
+        if (print) printSingleRow(triangle[i], i+1);
+    }
+    //if(print) printf("\n");
+
+    return triangle[n-1];
 }
 
 void help() {
