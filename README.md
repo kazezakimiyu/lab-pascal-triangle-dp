@@ -4,7 +4,9 @@ In this lab we will explore dynamic programming. It is a fancy term, often taugh
 
 > If we already calculated an answer, save it, so we don't have to calculate it again!
 
-Really, that is the heart of it. The idea we are willing to spend more on memory, to save time on speed. While there are some complexities, the idea of [memoization] is at the heart of it. If a function is a [pure function], it is relatively easy store the result? Why because with pure functions, you have the following properties (source wikipedia):
+Really, that is the heart of it. The idea we are willing to spend more on memory, to save time on speed. While there are some complexities, 
+the idea of [memoization] is at the heart of it. If a function is a [pure function], it is relatively easy store the result? 
+Why because with pure functions, you have the following properties (source wikipedia):
 
 1. the function return values are identical for identical arguments 
 2. the function has no side effects 
@@ -47,7 +49,7 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
-However, while this algorithm is mathematically sound and easier to write, it is extremely inefficient. You have $n^2 * n^2$ operations making $O(n^4)$!!
+However, while this algorithm is mathematically sound and easier to write, it is extremely inefficient.
 
 There are solutions that are cheaper, and your next step is to add memoization to reduce the cost of this algorithm. 
 
@@ -101,7 +103,7 @@ Both will run relatively quickly, but if you increase your number to ~35, you wi
 👉🏽 **Task**: Discuss the following together:
 * What is the Big O for each version, and 
 * What are observations about the code? 
-  * For example, why use unsigned long long -what does that even mean!? 
+  * For example, why use uint64 -what does that even mean!? 
   * Why use typedef? 
 * You can also look up solutions online (there are a plenty of them) and discuss what you find.   
 
