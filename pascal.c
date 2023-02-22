@@ -12,18 +12,12 @@ static long table[MAX][MAX];
 ull pascaldp(int n, int i)
 {
  // todo by student
- /*
-    for (int k = 0; i < MAX; k++) {
-        for (int j = 0; j < MAX; j++){
-            table[k][j] = -1;
-        }
-    }
-
+    /*
     if(n == i || i == 0) {
         table[n][i] = 1;
         return table[n][i];
     }
-    else if(table[n][i] != -1) {
+    else if(table[n][i] != 0) {
         return table[n][i];
     }
     table[n][i] = pascaldp(n - 1, i) + pascaldp(n - 1, i - 1);
