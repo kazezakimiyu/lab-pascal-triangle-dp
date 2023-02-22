@@ -5,14 +5,37 @@
 #define MAX 50000
 
 typedef unsigned long long ull;
+static long table[MAX][MAX];
 
 // don't forget to allocate space for your table (multi-demi arrayof MAX x MAX)
-
+// binom{n}{k} = binom{n-1}{k-1} + binom{n-1}{k}
 ull pascaldp(int n, int i)
 {
  // todo by student
+ /*
+    for (int k = 0; i < MAX; k++) {
+        for (int j = 0; j < MAX; j++){
+            table[k][j] = -1;
+        }
+    }
 
- return 0; // just here to compile, delete
+    if(n == i || i == 0) {
+        table[n][i] = 1;
+        return table[n][i];
+    }
+    else if(table[n][i] != -1) {
+        return table[n][i];
+    }
+    table[n][i] = pascaldp(n - 1, i) + pascaldp(n - 1, i - 1);
+    return table[n][i];
+    */
+    if (n==i || i==0) {
+        return 1;
+    }
+    if(table[n][i] == 0){
+        table[n][i] = pascaldp(n-1, i-1) + pascaldp(n-1, i);
+    }
+    return table[n][i];
 }
 
 ull pascalr(int n, int i)
